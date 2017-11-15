@@ -46,6 +46,8 @@ void LCD_pos(unsigned char col, unsigned char row);
 unsigned char keyboard();
 unsigned char key_scan();
 
+void korobeiniki(void);
+
 void ctc1_init(void);
 void tone(double hz, int s_time);
 void tone_oct(char oct[], double meter); //총 요소 3개 첫번째 : 옥타브  두번째 : 음  세번째 : 온음(w)/반음(h)
@@ -54,6 +56,7 @@ int main(void)
 {
 	sei();
 	timer_init();
+	ctc1_init();
 	DDRA = 0xff;
 	DDRB = 0xff;
 	//EIMSK = 0xff;
@@ -61,7 +64,6 @@ int main(void)
 	SFIOR = 0x00;
 	KEY_DIR = 0x0f;
 	KEY_PORT = 0xff;
-	pwm1_init();
 		
 	DDRC = 0xff;
 	PORTC = 0x0f;
@@ -69,25 +71,21 @@ int main(void)
 	LCD_pos(0, 0);
 	LCD_string("jukebox1");
 	LCD_pos(0, 1);
+	korobeiniki();
 	while (1)
 	{
+		/*
 		bpm = 60;
 		tone_oct("4Cw", 1);
-		delay_ms(50);
 		tone_oct("4Dw", 1);
-		delay_ms(50);
 		tone_oct("4Ew", 1);
-		delay_ms(50);
 		tone_oct("4Fw", 1);
-		delay_ms(50);
 		tone_oct("4Gw", 1);
-		delay_ms(50);
 		tone_oct("5Aw", 1);
-		delay_ms(50);
 		tone_oct("5Bw", 1);
-		delay_ms(50);
 		tone_oct("5Cw", 1);
-		delay_ms(50);
+		*/
+		
 	}
 }
 
@@ -244,8 +242,8 @@ void ctc1_init(void){
 
 void tone(double hz, int s_time){
 	ICR1 = (unsigned int)((2000000 / hz + 0.5)/2);			//set cycle
-	TCCR1A |= (1 << COM1B1);
-	TCCR1A &= ~(1 << COM1B0);
+	TCCR1A &= ~(1 << COM1B1);
+	TCCR1A |= (1 << COM1B0);
 	delay_ms(s_time);
 	TCCR1A &= ~(1 << COM1B1);
 	TCCR1A &= ~(1 << COM1B0);
@@ -299,4 +297,61 @@ void tone_oct(char oct[], double meter){
 			tone((55 * pow(2 , ((oct[0] - 0x30) - 1) + (double)11/12)), s_time);
 		}
 	}
+}
+
+void korobeiniki(void){
+	bpm = 300;
+	/*
+	tone_oct("5Ew", 2);
+	tone_oct("5Bw", 1);
+	tone_oct("5Cw", 1);
+	tone_oct("5Dw", 2);
+	tone_oct("5Cw", 1);
+	tone_oct("5Bw", 1);
+	tone_oct("5Aw", 3);
+	tone_oct("5Cw", 1);
+	tone_oct("5Ew", 2);
+	tone_oct("5Dw", 1);
+	tone_oct("5Cw", 1);
+	tone_oct("5Bw", 3);
+	tone_oct("5Cw", 1);
+	tone_oct("5Dw", 2);
+	tone_oct("5Ew", 2);
+	tone_oct("5Cw", 2);
+	tone_oct("5Aw", 2);
+	tone_oct("5Aw", 4);
+	*/
+	tone_oct("5Ew", 1);
+	tone_oct("5Fw", 0.5);
+	tone_oct("5Ew", 0.5);
+	tone_oct("5Bw", 1);
+	tone_oct("5Cw", 1);
+	tone_oct("5Dw", 1);
+	tone_oct("5Ew", 0.5);
+	tone_oct("5Dw", 0.5);
+	tone_oct("5Cw", 1);
+	tone_oct("5Bw", 1);
+	tone_oct("5Aw", 1);
+	tone_oct("4Ew", 1);
+	tone_oct("5Aw", 1);
+	tone_oct("5Cw", 1);
+	tone_oct("5Ew", 1);
+	tone_oct("5Fw", 0.5);
+	tone_oct("5Ew", 0.5);
+	tone_oct("5Dw", 1);
+	tone_oct("5Cw", 1);
+	tone_oct("5Bw", 1);
+	tone_oct("4Ew", 1);
+	tone_oct("4Gh", 1);
+	tone_oct("5Bw", 1);
+	tone_oct("5Dw", 1);
+	tone_oct("4Gh", 1);
+	tone_oct("5Ew", 1);
+	tone_oct("4Gh", 1);
+	tone_oct("5Cw", 1);
+	tone_oct("5Aw", 1);
+	tone_oct("4Gh", 1);
+	tone_oct("5Aw", 1);
+	tone_oct("5Aw", 3);
+	delay_ms(1000);
 }

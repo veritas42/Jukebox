@@ -251,7 +251,10 @@ void tone(double hz, int s_time){
 
 void tone_oct(char oct[], double meter){
 	int s_time = (int)(meter * 60000 / bpm);
-	if(oct[1] == 'A'){
+	if(oct[1] == 'H'){
+		delay_ms(s_time);	
+	}
+	else if(oct[1] == 'A'){
 		if(oct[2] == 'w'){
 			tone((55 * pow(2 , (oct[0] - 0x30) - 1)), s_time);	
 		}	
@@ -353,5 +356,50 @@ void korobeiniki(void){
 	tone_oct("4Gh", 1);
 	tone_oct("5Aw", 1);
 	tone_oct("5Aw", 3);
+	tone_oct("0Hw", 1);
+	
+	tone_oct("5Dw", 1);
+	tone_oct("5Aw", 1);
+	tone_oct("5Dw", 1);
+	tone_oct("5Fw", 1);
+	tone_oct("6Aw", 1);
+	tone_oct("6Bw", 0.5);
+	tone_oct("6Aw", 0.5);
+	tone_oct("5Gw", 1);
+	tone_oct("5Fw", 1);
+	tone_oct("5Ew", 1);
+	tone_oct("5Aw", 1);
+	tone_oct("5Cw", 1);
+	tone_oct("5Dw", 1);
+	tone_oct("5Ew", 1);
+	tone_oct("5Aw", 1);
+	tone_oct("5Dw", 1);
+	tone_oct("5Cw", 1);
+	tone_oct("5Bw", 1);
+	tone_oct("4Ew", 1);
+	tone_oct("4Gh", 1);
+	tone_oct("5Bw", 1);
+	tone_oct("5Dw", 1);
+	tone_oct("4Gh", 1);
+	tone_oct("5Bh", 1);
+	tone_oct("5Dw", 1);
+	tone_oct("5Fw", 1);
+	tone_oct("5Dw", 1);
+	tone_oct("5Gh", 1);
+	tone_oct("6Bw", 1);
+	tone_oct("6Dw", 1);
+	tone_oct("6Fw", 1);
+	tone_oct("6Gh", 1);
+	tone_oct("7Bw", 1);
+	tone_oct("7Ew", 4);
+	tone_oct("0Hw", 2);
+	tone_oct("7Ew", 0.5);
+	tone_oct("7Dw", 0.5);
+	tone_oct("7Cw", 0.5);
+	tone_oct("7Bw", 0.5);
+	tone_oct("7Aw", 1);
+	tone_oct("0Hw", 3);
+	tone_oct("6Aw", 1);
+	tone_oct("0Hw", 3);
 	delay_ms(1000);
 }

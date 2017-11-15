@@ -16,7 +16,7 @@
 #define LCD_DATA_P PORTA     //LCD데이터 포트 정의
 #define	LCD_CTRL_D DDRA
 #define LCD_CTRL_P PORTA   //LCD 제어 포트 정의
-#define LCD_EN 0x04         //LCD 제어(PING0~2)를 효과적으로 하기위한 정의
+#define LCD_EN 0x04         //LCD 제어(PINA0~2)를 효과적으로 하기위한 정의
 #define LCD_RW 0x02
 #define LCD_RS 0x01
 #define LCD_DB 0xf0
@@ -30,27 +30,23 @@
 #define KEY_PORT	PORTC	
 #define KEY_PIN		PINC
 
-volatile unsigned long long msec = 0;
-volatile unsigned char times[5] = {1, 1, 0, 0, 0}; // mo/dd/hh/mm/ss
-volatile unsigned int year = 0;
 volatile unsigned long long delay = 0;
-const unsigned char mo_table[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 volatile unsigned int bpm = 60;
 
 void timer_init(void);
 void delay_ms(int val);
 
+void LCD_init(void);
 void LCD_data(unsigned char byte);
 void LCD_command(unsigned char byte);
 void LCD_busy(void);
 void LCD_string(char *str);
 void LCD_pos(unsigned char col, unsigned char row);
-void LCD_init(void);
 
 unsigned char keyboard();
 unsigned char key_scan();
 
-void pwm1_init(void);
+void ctc1_init(void);
 void tone(double hz, int s_time);
 void tone_oct(char oct[], double meter); //총 요소 3개 첫번째 : 옥타브  두번째 : 음  세번째 : 온음(w)/반음(h)
 
@@ -75,51 +71,7 @@ int main(void)
 	LCD_pos(0, 1);
 	while (1)
 	{
-		/*
-		LCD_data(((year / 10) % 10) + 0x30);
-		LCD_data((year % 10) + 0x30);
-		LCD_data((times[0] / 10) + 0x30);
-		LCD_data((times[0] % 10) + 0x30);
-		LCD_data((times[1] / 10) + 0x30);
-		LCD_data((times[1] % 10) + 0x30);
-		LCD_data((times[2] / 10) + 0x30);
-		LCD_data((times[2] % 10) + 0x30);
-		LCD_data((times[3] / 10) + 0x30);
-		LCD_data((times[3] % 10) + 0x30);
-		LCD_data((times[4] / 10) + 0x30);
-		LCD_data((times[4] % 10) + 0x30);
-		*/
-		/*
-		key = key_scan();
-		LCD_data((unsigned char)(key + 0x30));
-		delay_ms(1000);
-		*/
-		/*
-		tone(440, 100);
-		delay_ms(50);
-		tone(440, 100);
-		delay_ms(50);
-		tone(440, 100);
-		delay_ms(50);
-		tone(440, 500);
-		delay_ms(50);
-		tone(440, 500);
-		delay_ms(50);
-		tone(440, 500);
-		delay_ms(50);
-		tone(440, 100);
-		delay_ms(50);
-		tone(440, 100);
-		delay_ms(50);
-		tone(440, 100);
-		delay_ms(500);
-		*/
-		/*
-		PORTB |= (1 << PORTB0);
-		delay_ms(2);
-		PORTB &= ~(1 << PORTB0);
-		delay_ms(2);
-		*/
+		bpm = 60;
 		tone_oct("4Cw", 1);
 		delay_ms(50);
 		tone_oct("4Dw", 1);
@@ -141,21 +93,6 @@ int main(void)
 
 ISR(TIMER0_OVF_vect){
 	TCNT0 = 0x83;
-	msec += 1;
-	/*
-	times[4] = msec / 1000 ? times[4] + 1 : times[4];
-	msec %= 1000;
-	times[3] = times[4] / 60 ? times[3] + 1 : times[3];
-	times[4] %= 60;
-	times[2] = times[3] / 60 ? times[2] + 1 : times[2];
-	times[3] %= 60;
-	times[1] = times[2] / 24 ? times[1] + 1 : times[1];
-	times[2] %= 24;
-	times[0] = times[1] / mo_table[times[0]-1]  ? times[0] + 1 : times[0];
-	times[1] %= mo_table[times[0]-1];
-	year = times[0] / 12 ?  year + 1 : year;
-	times[0] %= 12;
-	*/
 	delay = delay ? delay - 1 : delay;
 }
 
@@ -292,10 +229,10 @@ unsigned char key_scan(){
 	return key_value;
 }
 
-void pwm1_init(void){	
-	//set fast pwm
+void ctc1_init(void){	
+	//set ctc mode
 	TCCR1A &= ~(1 << WGM10);
-	TCCR1A |= (1 << WGM11);
+	TCCR1A &= ~(1 << WGM11);
 	TCCR1B |= (1 << WGM12);
 	TCCR1B |= (1 << WGM13);
 	
@@ -306,8 +243,7 @@ void pwm1_init(void){
 }
 
 void tone(double hz, int s_time){
-	ICR1 = (unsigned int)(2000000 / hz + 0.5);			//set cycle
-	OCR1B = (unsigned int)((2000000 / hz + 0.5) / 2);	//set ovf comp
+	ICR1 = (unsigned int)((2000000 / hz + 0.5)/2);			//set cycle
 	TCCR1A |= (1 << COM1B1);
 	TCCR1A &= ~(1 << COM1B0);
 	delay_ms(s_time);

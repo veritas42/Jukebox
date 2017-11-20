@@ -11,7 +11,11 @@
 #include <avr/common.h>
 #include <avr/interrupt.h>
 #include <math.h>
+#include "lcd.h"
+#include "timer.h"
+#include "sound.h"
 
+/*
 #define LCD_DATA_D DDRA
 #define LCD_DATA_P PORTA     //LCD데이터 포트 정의
 #define	LCD_CTRL_D DDRA
@@ -51,6 +55,11 @@ void korobeiniki(void);
 void ctc1_init(void);
 void tone(double hz, int s_time);
 void tone_oct(char oct[], double meter); //총 요소 3개 첫번째 : 옥타브  두번째 : 음  세번째 : 온음(w)/반음(h)
+*/
+
+extern volatile unsigned int bpm;
+
+void korobeiniki();
 
 int main(void)
 {
@@ -62,8 +71,8 @@ int main(void)
 	//EIMSK = 0xff;
 	//EICRA = 0xff;
 	SFIOR = 0x00;
-	KEY_DIR = 0x0f;
-	KEY_PORT = 0xff;
+	//KEY_DIR = 0x0f;
+	//KEY_PORT = 0xff;
 		
 	DDRC = 0xff;
 	PORTC = 0x0f;
@@ -89,6 +98,7 @@ int main(void)
 	}
 }
 
+/*
 ISR(TIMER0_OVF_vect){
 	TCNT0 = 0x83;
 	delay = delay ? delay - 1 : delay;
@@ -301,6 +311,7 @@ void tone_oct(char oct[], double meter){
 		}
 	}
 }
+*/
 
 void korobeiniki(void){
 	bpm = 300;

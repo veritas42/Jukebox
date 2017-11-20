@@ -1,6 +1,9 @@
 
 #include <avr/common.h>
 #include <avr/interrupt.h>
+#include "timer.h"
+
+volatile unsigned long long delay = 0;
 
 ISR(TIMER0_OVF_vect){
 	TCNT0 = 0x83;

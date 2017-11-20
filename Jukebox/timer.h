@@ -1,6 +1,8 @@
-#ifndef _TIMER_
+#ifndef TIMER_H_
 
-#define _TIMER_
+#define TIMER_H_
+
+extern volatile unsigned long long delay;
 
 void timer_init(void);
 void delay_ms(int val);

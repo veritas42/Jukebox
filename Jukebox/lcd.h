@@ -1,6 +1,5 @@
-#ifndef _LCD_
-
-#define _LCD_
+#ifndef LCD_H_
+#define LCD_H_
 
 #define LCD_DATA_D DDRA
 #define LCD_DATA_P PORTA     //LCD데이터 포트 정의

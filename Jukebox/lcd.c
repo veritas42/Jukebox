@@ -1,4 +1,11 @@
-#include "timer.h"
+#include <avr/io.h>
+#include "lcd.h"
+
+extern void delay_ms(int);
+
+void LCD_busy(void){
+	delay_ms(2);
+}
 
 void LCD_data(unsigned char byte)
 {
@@ -37,9 +44,7 @@ void LCD_command(unsigned char byte)			   //PG0-EN , PG1-RW, PG2-RS , PG4-TOSC1Ç
 	LCD_CTRL_P &= ~LCD_EN;    //LCD »ç¿ë¾ÈÇÔ
 }
 
-void LCD_busy(void){
-	delay_ms(2);
-}
+
 
 void LCD_string(char *str)    //¡è¹®ÀÚ¿­À» ÇÑ¹®ÀÚ¾¿ Ãâ·ÂÇÔ¼ö·Î Àü´Þ
 {

@@ -9,38 +9,20 @@
 
 volatile unsigned char state = 0;
 volatile unsigned char select = 0;
-volatile unsigned char mode = 0;
 
 void butten_init(void){
 	sei();
-	EIMSK |= (1 << INT0); 
-	EICRA = (EICRA | (1 << ISC01) | (1 << ISC11) | (1 << ISC21) | (1 << ISC31)) & ~((1 << ISC00) | (1 << ISC10) | (1 << ISC20) | (1 << ISC30));
+	EIMSK |= (1 << INT0) | (1 << INT1); 
+	EICRA =0x0a;
+	//EICRA = (EICRA | ((1 << ISC01) | (1 << ISC11) | (1 << ISC21))) & ~((1 << ISC00) | (1 << ISC10) | (1 << ISC20));
 }
 
 ISR(INT0_vect){
-	state = 1 - state;
+	state = 1;
 }
 
 ISR(INT1_vect){
-	select = select >= 0 ? select - 1 : select;
+	select += 1;
+	select %= MAXSELECT;
 }
 
-ISR(INT2_vect){
-	select = select < MAXSELECT ? select + 1 : select;
-}
-
-ISR(INT3_vect){
-	mode = (mode + 1) % MODENUM;
-}
-
-unsigned char state(void){
-	return state;	
-}
-
-unsigned char select(void){
-	return select;
-}
-
-unsigned char mode(void){
-	return mode;
-}

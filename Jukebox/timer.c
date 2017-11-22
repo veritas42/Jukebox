@@ -16,7 +16,7 @@ void timer_init(void){
 	TCNT0 = 0x83;
 }
 
-void delay_ms(int val){
+void delay_ms(unsigned int val){
 	delay = val;
 	while(delay!=0);
 }

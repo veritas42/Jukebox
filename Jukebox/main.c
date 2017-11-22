@@ -16,7 +16,10 @@
 #include "sound.h"
 #include "butten.h"
 
+void play();
+void SOS();
 void korobeiniki();
+void rasputin();
 
 int main(void)
 {
@@ -25,29 +28,61 @@ int main(void)
 	ctc1_init();
 	LCD_init();
 	butten_init();
-	//DDRA = 0xff;
-	//DDRB = 0xff;
-	//KEY_DIR = 0x0f;
-	//KEY_PORT = 0xff;
-		
-	//DDRC = 0xff;
-	//PORTC = 0x0f;
-	LCD_init();
 	LCD_pos(0, 0);
-	LCD_string("jukebox1");
+	LCD_string("jukebox");
 	LCD_pos(0, 1);
-	korobeiniki();
+	tone(440, 1000);
+	DDRE = 0xff;
 	while (1)
 	{
-		if(mode() == 0){
-			
-		}
+		play();
 	}
 }
 
+void play(){
+	
+	switch(select){
+		case 1:
+		LCD_pos(0, 1);
+		LCD_string("korobeiniki");
+		if(state){
+			korobeiniki();
+			state = 0;
+		}
+		break;
+		case 0:
+		LCD_pos(0, 1);
+		LCD_string("rasputin");
+		if(state){
+			rasputin();
+			state = 0;
+		}
+		break;
+		case 2:
+		LCD_pos(0, 1);
+		LCD_string("aaa");
+		break;
+	
+	}
+		
+}
+
+void SOS(){
+	bpm = 240;
+	tone_oct("4Aw", 1);
+	tone_oct("4Aw", 1);
+	tone_oct("4Aw", 1);
+	tone_oct("4Aw", 3);
+	tone_oct("4Aw", 3);
+	tone_oct("4Aw", 3);
+	tone_oct("4Aw", 1);
+	tone_oct("4Aw", 1);
+	tone_oct("4Aw", 1);
+	tone_oct("4Hw", 5);
+}
 
 void korobeiniki(void){
-	bpm = 400;
+	bpm = 300;
 	tone_oct("5Ew", 1);
 	tone_oct("5Fw", 0.5);
 	tone_oct("5Ew", 0.5);
@@ -125,5 +160,57 @@ void korobeiniki(void){
 	tone_oct("0Hw", 3);
 	tone_oct("6Aw", 1);
 	tone_oct("0Hw", 3);
+	delay_ms(1000);
+}
+
+void rasputin(void){
+	bpm = 160;
+	tone_oct("5Bw", 1);
+	tone_oct("5Bw", 1);
+	tone_oct("5Aw", 0.5);
+	tone_oct("5Aw", 0.5);
+	tone_oct("5Aw", 1);
+	tone_oct("4Gh", 0.5);
+	tone_oct("4Gh", 0.5);
+	tone_oct("4Gh", 0.5);
+	tone_oct("4Gh", 0.5);
+	tone_oct("4Fh", 0.5);
+	tone_oct("4Ew", 0.5);
+	tone_oct("4Dh", 1);
+	
+	tone_oct("4Hw", 0.5);
+	tone_oct("5Aw", 0.5);
+	tone_oct("5Aw", 0.5);
+	tone_oct("5Aw", 0.5);
+	tone_oct("4Gh", 1);
+	tone_oct("4Gh", 1);
+	tone_oct("4Fh", 0.5);
+	tone_oct("4Fh", 0.5);
+	tone_oct("4Ew", 0.5);
+	tone_oct("4Fh", 2.5);
+	
+	tone_oct("5Bw", 1);
+	tone_oct("5Bw", 1);
+	tone_oct("5Aw", 0.5);
+	tone_oct("5Aw", 0.5);
+	tone_oct("5Aw", 1);
+	tone_oct("4Gh", 0.5);
+	tone_oct("4Gh", 0.5);
+	tone_oct("4Gh", 0.5);
+	tone_oct("4Gh", 0.5);
+	tone_oct("4Fh", 0.5);
+	tone_oct("4Ew", 0.5);
+	tone_oct("4Dh", 1);
+	
+	tone_oct("4Hw", 0.5);
+	tone_oct("5Aw", 0.5);
+	tone_oct("5Aw", 0.5);
+	tone_oct("5Aw", 0.5);
+	tone_oct("4Gh", 1);
+	tone_oct("4Gh", 1);
+	tone_oct("4Fh", 0.5);
+	tone_oct("4Fh", 0.5);
+	tone_oct("4Ew", 0.5);
+	tone_oct("4Fh", 2.5);
 	delay_ms(1000);
 }

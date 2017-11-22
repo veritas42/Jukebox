@@ -5,6 +5,6 @@
 extern volatile unsigned long long delay;
 
 void timer_init(void);
-void delay_ms(int val);
+void delay_ms(unsigned int val);
 
 #endif

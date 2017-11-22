@@ -5,6 +5,7 @@
  *  Author: veritas
  */ 
 
+#include <avr/io.h>
 #include <avr/common.h>
 #include <avr/interrupt.h>
 #include <math.h>
@@ -15,6 +16,8 @@ volatile unsigned int bpm = 60;
 extern void delay_ms(int);
 
 void ctc1_init(void){
+	DDRB = 0xff;
+	
 	//set ctc mode
 	TCCR1A &= ~(1 << WGM10);
 	TCCR1A &= ~(1 << WGM11);
@@ -34,6 +37,7 @@ void tone(double hz, int s_time){
 	delay_ms(s_time);
 	TCCR1A &= ~(1 << COM1B1);
 	TCCR1A &= ~(1 << COM1B0);
+	delay_ms(10);
 }
 
 void tone_oct(char oct[], double meter){
